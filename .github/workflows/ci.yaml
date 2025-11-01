@@ -16,7 +16,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # Step 2: Setup Node.js (choose correct version, check package.json)
+      # Step 2: Setup Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
@@ -32,9 +32,11 @@ jobs:
       - name: Run ESLint
         run: npm run lint
 
-      # Step 5: Run Prettier
-      - name: Run Prettier (check formatting)
-        run: npm run prettier
+      # Step 5: Auto-fix Prettier issues then check
+      - name: Fix and check formatting
+        run: |
+          npx prettier --write ./src/
+          npm run prettier
 
       # Step 6: Run tests
       - name: Run Jest tests
