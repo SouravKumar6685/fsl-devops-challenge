@@ -1,0 +1,47 @@
+name: Node.js CI
+
+on:
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: codebase/rdicidr-0.1.0
+
+    steps:
+      # Step 1: Checkout repo
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Step 2: Setup Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '15'
+          cache: 'npm'
+          cache-dependency-path: 'codebase/rdicidr-0.1.0/package-lock.json'
+
+      # Step 3: Install dependencies
+      - name: Install dependencies
+        run: npm install
+
+      # Step 4: Run linter
+      - name: Run ESLint
+        run: npm run lint
+
+      # Step 5: Auto-fix Prettier issues then check
+      - name: Fix and check formatting
+        run: |
+          npx prettier --write ./src/
+          npm run prettier
+
+      # Step 6: Run tests
+      - name: Run Jest tests
+        run: CI=true npm run test
+
+      # Step 7: Build the app
+      - name: Build application
+        run: npm run build
