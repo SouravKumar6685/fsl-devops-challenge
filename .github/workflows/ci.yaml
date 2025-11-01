@@ -34,7 +34,7 @@ jobs:
 
       # Step 5: Run Prettier
       - name: Run Prettier (check formatting)
-        run: npm run prettier -- --check
+        run: npm run prettier -- --write
 
       # Step 6: Run tests
       - name: Run Jest tests
